@@ -3,7 +3,7 @@
 #### simple math language
 Math operations:
 ```text
-() ** * / + -
+() ^ * / + -
 ```
 
 example script:
