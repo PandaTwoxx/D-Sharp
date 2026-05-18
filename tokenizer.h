@@ -7,7 +7,7 @@
 #include <cctype>
 
 enum class Tokens {
-    LPAREN, RPAREN, PLUS, MINUS, POW, MULT, DIV, PRINT, EQUALS, NUMBER, VARIABLE
+    LPAREN, RPAREN, PLUS, MINUS, POW, MULT, DIV, PRINT, EQUALS, NUMBER, VARIABLE, EOL
 };
 
 struct Token{
@@ -36,6 +36,7 @@ public:
             else if (c == '/') { tokens.push_back({ Tokens::DIV,     "" }); i++; }
             else if (c == '^') { tokens.push_back({ Tokens::POW,     "" }); i++; }
             else if (c == '=') { tokens.push_back({ Tokens::EQUALS,  "" }); i++; }
+            else if (c == ';') { tokens.push_back({ Tokens::EOL,     "" }); i++; }
             else if (isdigit(c)) {
                 std::string num;
                 while (i < s.size() && (isdigit(s[i]) || s[i] == '.'))
@@ -54,6 +55,7 @@ public:
             }
             else{
                 std::cerr << "Unknown Character: " << c << " at " << line << ":" << cc << std::endl;
+                exit(1);
             }
             cc++;
         }
