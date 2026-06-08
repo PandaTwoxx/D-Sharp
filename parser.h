@@ -1,16 +1,27 @@
 #ifndef AST_H
 #define AST_H
-
-class Parser;
-class ASTNode;
-
-#include "tokenizer.h"
-#include <vector>
 #include <memory>
+#include <string>
+
+using namespace std;
+
 
 class ASTNode {
-public:
+    public:
+    ASTNode(){}
     virtual ~ASTNode() = default;
+};
+
+class ASTExp : public ASTNode {};
+
+class BinExp : public ASTExp {
+    public:
+    BinExp(unique_ptr<ASTExp> left, unique_ptr<ASTExp> right, string op) : left(move(left)), right(move(right)), op(op) {};
+    
+    private:
+    unique_ptr<ASTExp> left;
+    unique_ptr<ASTExp> right;
+    string op;
 };
 
 #endif // AST_H
