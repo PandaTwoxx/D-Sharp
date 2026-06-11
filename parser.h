@@ -55,7 +55,7 @@ struct ProgramNode : public ASTNode {
 
 class Parser {
     public:
-    Parser(vector<Token> tokens) : tokens(move(tokens)), cursor(0) {}
+    Parser(vector<Token> tokens) : tokens(std::move(tokens)), cursor(0) {}
 
     unique_ptr<ProgramNode> parse() {
         auto program = std::make_unique<ProgramNode>();
