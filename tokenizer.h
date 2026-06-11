@@ -7,7 +7,7 @@
 #include <cctype>
 
 enum class Tokens {
-    LPAREN, RPAREN, PLUS, MINUS, POW, MULT, DIV, PRINT, EQUALS, NUMBER, VARIABLE, SEMI
+    LPAREN, RPAREN, PLUS, MINUS, POW, MULT, DIV, PRINT, EQUALS, NUMBER, VARIABLE, SEMI, DONE
 };
 
 struct Token{
