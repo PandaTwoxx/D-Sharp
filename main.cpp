@@ -24,10 +24,6 @@ int main(int argc, char* argv[]) {
     input = buffer.str();
     Tokenizer tokenizer;
     vector<Token> tokens = tokenizer.tokenize(input);
-    cout << "Tokens:" << endl;
-    for (const auto& token : tokens) {
-        cout << static_cast<int>(token.type) << " (" << token.val << ")" << endl;
-    }
 
     Parser parser(tokens);
     auto ast = parser.parse();
