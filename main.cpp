@@ -1,13 +1,16 @@
 #include <iostream>
 #include <fstream>
 #include <sstream>
+#include <chrono>
 #include "tokenizer.h"
+#include "parser.h"
 
 using namespace std;
 
 int main(int argc, char* argv[]) {
+    auto start = std::chrono::high_resolution_clock::now();
     if (argc < 2) {
-        cerr << "Usage: " << argv[0] << " <input_string>" << endl;
+        cerr << "Usage: " << argv[0] << " <path_to_file>" << endl;
         return 1;
     }
     string input;
@@ -26,5 +29,12 @@ int main(int argc, char* argv[]) {
         cout << static_cast<int>(token.type) << " (" << token.val << ")" << endl;
     }
 
+    Parser parser(tokens);
+    auto ast = parser.parse();
+
+
+    auto end = std::chrono::steady_clock::now();
+    auto duration = std::chrono::duration_cast<std::chrono::microseconds>(end - start);
+    cout << "Completed in " << duration.count() << " microseconds" << endl;
     return 0;
 }
