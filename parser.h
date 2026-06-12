@@ -203,7 +203,7 @@ class Parser {
             return expr;
         }
         
-        throw std::runtime_error("Unexpected token in expression: " + current.val);
+        throw std::runtime_error("Unexpected token in expression: " + to_string(line));
     }
 };
     
