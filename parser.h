@@ -9,6 +9,24 @@
 using namespace std;
 
 
+struct ProgramNode;
+struct AssignStmtNode;
+struct PrintStmtNode;
+struct LiteralNode;
+struct VariableNode;
+struct BinaryExprNode;
+
+class ASTVisitor {
+public:
+    virtual ~ASTVisitor() = default;
+    virtual void visit(ProgramNode& node) = 0;
+    virtual void visit(AssignStmtNode& node) = 0;
+    virtual void visit(PrintStmtNode& node) = 0;
+    virtual double visit(LiteralNode& node) = 0;
+    virtual double visit(VariableNode& node) = 0;
+    virtual double visit(BinaryExprNode& node) = 0;
+};
+
 enum class ASTNodeType { Program, AssignStmt, PrintStmt, BinaryExpr, Literal, Variable };
 
 struct ASTNode {
@@ -16,16 +34,20 @@ struct ASTNode {
     virtual ASTNodeType getType() const = 0;
 };
 
-struct ExprNode : public ASTNode {};
+struct ExprNode : public ASTNode {
+    virtual double accept(ASTVisitor& visitor) = 0;
+};
 
 struct LiteralNode : public ExprNode {
     std::string value;
     ASTNodeType getType() const override { return ASTNodeType::Literal; }
+    double accept(ASTVisitor& visitor) override { return visitor.visit(*this); }
 };
 
 struct VariableNode : public ExprNode {
     std::string name;
     ASTNodeType getType() const override { return ASTNodeType::Variable; }
+    double accept(ASTVisitor& visitor) override { return visitor.visit(*this); }
 };
 
 struct BinaryExprNode : public ExprNode {
@@ -33,24 +55,30 @@ struct BinaryExprNode : public ExprNode {
     std::unique_ptr<ExprNode> left;
     std::unique_ptr<ExprNode> right;
     ASTNodeType getType() const override { return ASTNodeType::BinaryExpr; }
+    double accept(ASTVisitor& visitor) override { return visitor.visit(*this); }
 };
 
-struct StmtNode : public ASTNode {};
+struct StmtNode : public ASTNode {
+    virtual void accept(ASTVisitor& visitor) = 0;
+};
 
 struct AssignStmtNode : public StmtNode {
     std::string varName;
     std::unique_ptr<ExprNode> value;
     ASTNodeType getType() const override { return ASTNodeType::AssignStmt; }
+    void accept(ASTVisitor& visitor) override { visitor.visit(*this); }
 };
 
 struct PrintStmtNode : public StmtNode {
     std::unique_ptr<ExprNode> expr;
     ASTNodeType getType() const override { return ASTNodeType::PrintStmt; }
+    void accept(ASTVisitor& visitor) override { visitor.visit(*this); }
 };
 
 struct ProgramNode : public ASTNode {
     std::vector<std::unique_ptr<StmtNode>> statements;
     ASTNodeType getType() const override { return ASTNodeType::Program; }
+    void accept(ASTVisitor& visitor) { visitor.visit(*this); }
 };
 
 class Parser {

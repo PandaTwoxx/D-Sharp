@@ -2,8 +2,10 @@
 #include <fstream>
 #include <sstream>
 #include <chrono>
+
 #include "tokenizer.h"
 #include "parser.h"
+#include "interpreter.h"
 
 using namespace std;
 
@@ -28,6 +30,8 @@ int main(int argc, char* argv[]) {
     Parser parser(tokens);
     auto ast = parser.parse();
 
+    Interpreter interpreter;
+    interpreter.visit(*ast);
 
     auto end = std::chrono::steady_clock::now();
     auto duration = std::chrono::duration_cast<std::chrono::microseconds>(end - start);

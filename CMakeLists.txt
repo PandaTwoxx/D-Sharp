@@ -6,4 +6,5 @@ add_executable(dsharp
     main.cpp 
     tokenizer.h
     parser.h
+    interpreter.h
 )
